@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,44 +6,44 @@
 
 @layer base {
   :root {
-    --background: 40 20% 97%;
-    --foreground: 220 15% 20%;
+    --background: 0 0% 98%;
+    --foreground: 220 10% 28%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 15% 20%;
+    --card-foreground: 220 10% 28%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 20%;
+    --popover-foreground: 220 10% 28%;
 
-    --primary: 38 55% 55%;
+    --primary: 300 52% 37%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 15% 93%;
-    --secondary-foreground: 220 15% 25%;
+    --secondary: 300 20% 95%;
+    --secondary-foreground: 300 30% 30%;
 
-    --muted: 40 10% 95%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 240 5% 95%;
+    --muted-foreground: 220 8% 50%;
 
-    --accent: 38 55% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 300 40% 93%;
+    --accent-foreground: 300 52% 30%;
 
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 90%;
-    --input: 40 15% 90%;
-    --ring: 38 55% 55%;
+    --border: 240 8% 91%;
+    --input: 240 8% 91%;
+    --ring: 300 52% 37%;
 
     --radius: 0.625rem;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 15% 30%;
-    --sidebar-primary: 38 55% 55%;
+    --sidebar-foreground: 220 10% 35%;
+    --sidebar-primary: 300 52% 37%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 40 20% 96%;
-    --sidebar-accent-foreground: 220 15% 20%;
-    --sidebar-border: 40 15% 92%;
-    --sidebar-ring: 38 55% 55%;
+    --sidebar-accent: 300 25% 96%;
+    --sidebar-accent-foreground: 300 40% 25%;
+    --sidebar-border: 240 8% 93%;
+    --sidebar-ring: 300 52% 37%;
 
     --success: 152 55% 45%;
     --success-foreground: 0 0% 100%;
@@ -55,8 +55,7 @@
     --whatsapp: 142 70% 40%;
     --instagram: 330 80% 55%;
 
-    --font-display: 'Cormorant Garamond', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
   }
 }
 
@@ -69,15 +68,6 @@
     font-family: var(--font-body);
   }
   h1, h2, h3, h4 {
-    font-family: var(--font-display);
-  }
-}
-
-@layer utilities {
-  .font-display {
-    font-family: var(--font-display);
-  }
-  .font-body {
     font-family: var(--font-body);
   }
 }
