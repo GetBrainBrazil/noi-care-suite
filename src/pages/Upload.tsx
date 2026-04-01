@@ -31,7 +31,7 @@ const Upload = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-display font-semibold text-foreground">Upload de Arquivos</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Upload de Arquivos</h1>
         <p className="text-muted-foreground text-sm mt-1">Envie documentos e imagens dos pacientes</p>
       </div>
 
@@ -45,7 +45,7 @@ const Upload = () => {
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
             <UploadIcon className="h-7 w-7 text-primary" />
           </div>
-          <p className="font-display text-xl font-semibold text-foreground mb-2">Arraste e solte seus arquivos aqui</p>
+          <p className="text-xl font-semibold text-foreground mb-2">Arraste e solte seus arquivos aqui</p>
           <p className="text-sm text-muted-foreground mb-4">ou clique para selecionar do computador</p>
           <div className="flex gap-3">
             <Badge variant="secondary" className="gap-1.5">
@@ -61,7 +61,7 @@ const Upload = () => {
 
       <Card className="border-border/50 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-display font-semibold">Arquivos Enviados</CardTitle>
+          <CardTitle className="text-lg font-semibold">Arquivos Enviados</CardTitle>
         </CardHeader>
         <CardContent>
           <table className="w-full text-sm">

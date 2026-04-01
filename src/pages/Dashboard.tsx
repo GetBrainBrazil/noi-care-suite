@@ -44,7 +44,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-display font-semibold text-foreground">Visão Geral</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Visão Geral</h1>
         <p className="text-muted-foreground text-sm mt-1">Acompanhe suas métricas e leads em tempo real</p>
       </div>
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
                 <stat.icon className="h-5 w-5 text-primary" />
                 <span className="text-xs font-medium text-success">{stat.change}</span>
               </div>
-              <p className="text-2xl font-semibold font-display text-foreground">{stat.value}</p>
+              <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
               <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
             </CardContent>
           </Card>
@@ -66,7 +66,7 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="lg:col-span-2 border-border/50 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-display font-semibold">Leads por Canal</CardTitle>
+            <CardTitle className="text-lg font-semibold">Leads por Canal</CardTitle>
             <p className="text-xs text-muted-foreground">Comparativo mensal — WhatsApp vs Instagram</p>
           </CardHeader>
           <CardContent>
@@ -86,7 +86,7 @@ const Dashboard = () => {
 
         <Card className="border-border/50 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg font-display font-semibold">Distribuição</CardTitle>
+            <CardTitle className="text-lg font-semibold">Distribuição</CardTitle>
             <p className="text-xs text-muted-foreground">Origem dos leads ativos</p>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
@@ -114,7 +114,7 @@ const Dashboard = () => {
 
       <Card className="border-border/50 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-display font-semibold">Leads Recentes</CardTitle>
+          <CardTitle className="text-lg font-semibold">Leads Recentes</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
