@@ -10,7 +10,7 @@ const Suporte = () => {
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
       <div>
-        <h1 className="text-3xl font-display font-semibold text-foreground">Suporte</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Suporte</h1>
         <p className="text-muted-foreground text-sm mt-1">Precisa de ajuda? Abra um ticket para nossa equipe</p>
       </div>
 
@@ -21,7 +21,7 @@ const Suporte = () => {
               <LifeBuoy className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg font-display font-semibold">Abertura de Ticket</CardTitle>
+              <CardTitle className="text-lg font-semibold">Abertura de Ticket</CardTitle>
               <p className="text-xs text-muted-foreground">Preencha o formulário e retornaremos em até 24h</p>
             </div>
           </div>

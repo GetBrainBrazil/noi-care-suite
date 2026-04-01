@@ -27,7 +27,7 @@ const Configuracoes = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-display font-semibold text-foreground">Configurações</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Configurações</h1>
         <p className="text-muted-foreground text-sm mt-1">Gerencie usuários e dados da clínica</p>
       </div>
 
@@ -40,7 +40,7 @@ const Configuracoes = () => {
         <TabsContent value="usuarios" className="mt-4">
           <Card className="border-border/50 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-display font-semibold">Membros da Equipe</CardTitle>
+              <CardTitle className="text-lg font-semibold">Membros da Equipe</CardTitle>
               <Button size="sm" className="gap-1.5 text-xs">
                 <UserPlus className="h-3.5 w-3.5" /> Adicionar
               </Button>
@@ -79,7 +79,7 @@ const Configuracoes = () => {
         <TabsContent value="ajustes" className="mt-4">
           <Card className="border-border/50 shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-display font-semibold">Dados da Clínica</CardTitle>
+              <CardTitle className="text-lg font-semibold">Dados da Clínica</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

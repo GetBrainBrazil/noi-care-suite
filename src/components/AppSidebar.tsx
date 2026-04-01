@@ -34,7 +34,7 @@ export function AppSidebar() {
           <img src={noiLogo} alt="NOI Odonto" className="w-9 h-9" />
           {!collapsed && (
             <div>
-              <p className="font-display text-base font-semibold text-sidebar-foreground leading-tight">NOI Odonto</p>
+              <p className="text-base font-semibold text-sidebar-foreground leading-tight">NOI Odonto</p>
               <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Plataforma CRM</p>
             </div>
           )}

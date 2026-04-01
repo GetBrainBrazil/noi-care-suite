@@ -53,7 +53,7 @@ const Atendimento = () => {
   return (
     <div className="animate-fade-in h-[calc(100vh-7rem)]">
       <div className="mb-4">
-        <h1 className="text-3xl font-display font-semibold text-foreground">Central de Atendimento</h1>
+        <h1 className="text-3xl font-semibold text-foreground">Central de Atendimento</h1>
         <p className="text-muted-foreground text-sm mt-1">Gerencie suas conversas com leads</p>
       </div>
 
