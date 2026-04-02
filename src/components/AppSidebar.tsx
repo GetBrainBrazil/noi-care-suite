@@ -35,7 +35,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div>
               <p className="text-base font-semibold text-sidebar-foreground leading-tight">NOI Odonto</p>
-              <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Plataforma CRM</p>
+              <p className="text-[10px] text-muted-foreground tracking-widest uppercase">Plataforma de Controle</p>
             </div>
           )}
         </div>
