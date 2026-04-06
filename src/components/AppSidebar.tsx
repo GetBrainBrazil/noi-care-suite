@@ -1,6 +1,6 @@
-import { LayoutDashboard, MessageSquare, Upload, Settings, LifeBuoy, LogOut } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Upload, Settings, LifeBuoy, LogOut, Users, CalendarDays, Bot } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import noiLogo from "@/assets/noi-logo.png";
 import {
   Sidebar,
@@ -17,6 +17,9 @@ import {
 const menuItems = [
   { title: "Visão Geral", url: "/dashboard", icon: LayoutDashboard },
   { title: "Atendimento", url: "/atendimento", icon: MessageSquare },
+  { title: "Leads", url: "/leads", icon: Users },
+  { title: "Agenda", url: "/agenda", icon: CalendarDays },
+  { title: "Config. IA", url: "/ia", icon: Bot },
   { title: "Upload", url: "/upload", icon: Upload },
   { title: "Configurações", url: "/configuracoes", icon: Settings },
   { title: "Suporte", url: "/suporte", icon: LifeBuoy },
