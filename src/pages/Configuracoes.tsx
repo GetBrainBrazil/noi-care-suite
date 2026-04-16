@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Pencil, Trash2, UserPlus } from "lucide-react";
+import { Pencil, Trash2, UserPlus, Shield, UserCog, ArrowRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const teamMembers = [
   { name: "Dra. Ana Beatriz", email: "dra.ana@noiodonto.com", role: "Administrador", avatar: "AB" },
@@ -22,20 +23,61 @@ const roleColors: Record<string, string> = {
 };
 
 const Configuracoes = () => {
-  const [tab, setTab] = useState("usuarios");
+  const [tab, setTab] = useState("acessos");
+  const { isAdmin } = useAuth();
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-3xl font-semibold text-foreground">Configurações</h1>
-        <p className="text-muted-foreground text-sm mt-1">Gerencie usuários e dados da clínica</p>
+        <p className="text-muted-foreground text-sm mt-1">Gerencie acessos, equipe e dados da clínica</p>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="bg-muted/50">
-          <TabsTrigger value="usuarios">Gestão de Usuários</TabsTrigger>
+          {isAdmin && <TabsTrigger value="acessos">Acessos & Permissões</TabsTrigger>}
+          <TabsTrigger value="usuarios">Equipe (mock)</TabsTrigger>
           <TabsTrigger value="ajustes">Ajustes da Clínica</TabsTrigger>
         </TabsList>
+
+        {isAdmin && (
+          <TabsContent value="acessos" className="mt-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link to="/usuarios">
+                <Card className="border-border/50 shadow-sm hover:border-primary/40 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-6 flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <UserCog className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Gestão de Usuários</h3>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Aprove cadastros e atribua cargos.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              <Link to="/cargos">
+                <Card className="border-border/50 shadow-sm hover:border-primary/40 transition-colors cursor-pointer h-full">
+                  <CardContent className="p-6 flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Shield className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-semibold">Cargos & Permissões</h3>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">Crie cargos e controle módulos acessíveis.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </TabsContent>
+        )}
 
         <TabsContent value="usuarios" className="mt-4">
           <Card className="border-border/50 shadow-sm">
