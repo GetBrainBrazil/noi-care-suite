@@ -2,14 +2,18 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, X, UserCog, UserPlus, Building2 } from "lucide-react";
+import { Check, X, UserCog, UserPlus, Building2, MoreHorizontal, Shield, Trash2, ShieldCheck } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useClinic } from "@/contexts/ClinicContext";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 interface Profile {
   id: string;
@@ -30,7 +34,7 @@ const statusBadge: Record<string, string> = {
 const statusLabel: Record<string, string> = { pending: "Pendente", approved: "Aprovado", rejected: "Rejeitado" };
 
 const UsuariosPanel = () => {
-  const { activeClinic, activeClinicId, clinics } = useClinic();
+  const { activeClinic, activeClinicId, clinics, isClinicAdmin } = useClinic();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [memberships, setMemberships] = useState<Membership[]>([]);
