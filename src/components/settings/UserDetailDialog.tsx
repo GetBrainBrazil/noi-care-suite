@@ -469,10 +469,6 @@ export function UserDetailDialog({ user, open, onOpenChange, canEdit, activeClin
           <div className="grid grid-cols-2 gap-3 text-sm">
             <InfoRow icon={Calendar} label="Cadastrado em" value={formatDateTime(user.created_at)} />
             <InfoRow icon={Clock} label="Último acesso" value={user.last_sign_in_at ? formatDateTime(user.last_sign_in_at) : "—"} />
-            <div className="col-span-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Hash className="h-3 w-3" />
-              <span className="font-mono truncate">{user.user_id}</span>
-            </div>
           </div>
         </section>
 
