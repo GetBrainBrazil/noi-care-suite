@@ -1,24 +1,56 @@
 
-Vou criar as duas novas clínicas (Ipanema e Recreio), renomear a clínica seed atual ("NOI Odonto") para "Barra da Tijuca", e melhorar a experiência de troca/gerenciamento de unidades.
+Vou adicionar um modal (Dialog) que abre ao clicar no card do usuário, mostrando uma visualização detalhada com todos os dados dele.
 
-### 1. Dados (insert direto, sem migration)
-- `UPDATE clinics SET name='Barra da Tijuca' WHERE name='NOI Odonto'`
-- `INSERT INTO clinics (name)` para "Ipanema" e "Recreio"
-- Vincular o admin (`daniel@getbrain.com.br`) como **Administrador** nas 3 unidades via `clinic_members`, para que o switcher já apareça com as três opções e ele possa gerenciar todas.
+### O que o modal vai mostrar
 
-### 2. Melhorias de UX no seletor (`ClinicSwitcher`)
-Hoje o switcher já existe no topo do sidebar mas é simples. Vou deixar mais prático:
-- Mostrar **badge com inicial** da unidade ativa (ex: "B", "I", "R") para identificação visual rápida.
-- Ao trocar de clínica, exibir **toast** "Unidade alterada para Ipanema".
-- Indicador visual claro de qual está ativa no dropdown (já existe check, vou reforçar com destaque de fundo).
-- Ordenação alfabética garantida.
+**Cabeçalho**
+- Avatar grande com gradiente + iniciais
+- Nome completo, e-mail, badge de status (Ativo/Pendente)
 
-### 3. Header das páginas
-Adicionar um pill discreto **"Unidade: {nome}"** no topo do `DashboardLayout` (uma vez só, ao invés de página por página) — assim o usuário sempre sabe em qual unidade está operando, em qualquer tela.
+**Seção: Acesso & Permissões**
+- Cargo na unidade ativa
+- Lista de unidades em que participa (Barra, Ipanema, Recreio) com o cargo em cada uma
+- Módulos liberados (Dashboard, Agenda, Leads, etc.) como chips
 
-### 4. Aba "Clínicas" em Configurações
-O `ClinicasPanel` já permite criar/editar/desativar. Vou validar que está acessível e prático para o admin criar futuras unidades sozinho (sem precisar pedir pra mim).
+**Seção: Dados Profissionais** (visível para todos, com campos opcionais — preenchidos só se for dentista)
+- CRO (número de registro)
+- Especializações (multi: Ortodontia, Implantodontia, Endodontia, Periodontia, Estética, Odontopediatria, Cirurgia, Prótese, Clínico Geral)
+- Áreas de atuação / procedimentos que realiza
+- Bio / mini currículo
+
+**Seção: Contato & Pessoal**
+- Telefone / WhatsApp
+- Data de nascimento
+- Endereço
+
+**Seção: Sistema**
+- Data de cadastro
+- Último acesso (se disponível)
+- ID interno (discreto, em monoespaçada)
+
+### Comportamento
+- Card vira clicável (cursor-pointer + hover sutil já existe).
+- O menu de ações (...) continua funcionando sem abrir o modal (stopPropagation).
+- Para **admin** da unidade: botão "Editar dados profissionais" no rodapé do modal abre formulário inline para preencher CRO, especializações, etc.
+- Para **não-admin**: modal apenas leitura.
+
+### Backend
+Hoje `profiles` só tem: full_name, email, avatar_url, status. Preciso adicionar campos profissionais. Migration:
+
+```sql
+ALTER TABLE profiles ADD COLUMN phone text;
+ALTER TABLE profiles ADD COLUMN birth_date date;
+ALTER TABLE profiles ADD COLUMN address text;
+ALTER TABLE profiles ADD COLUMN cro text;              -- registro do dentista
+ALTER TABLE profiles ADD COLUMN specializations text[]; -- array de especializações
+ALTER TABLE profiles ADD COLUMN procedures text[];      -- procedimentos/áreas de atuação
+ALTER TABLE profiles ADD COLUMN bio text;
+ALTER TABLE profiles ADD COLUMN last_sign_in_at timestamptz;
+```
+
+Todos opcionais (nullable) — perfis existentes continuam funcionando. Detecção "é dentista?" = cargo na unidade contém "Dentista" (case-insensitive); se sim, a seção profissional aparece em destaque, senão fica colapsada/oculta.
 
 ### Arquivos
-- **Dados:** insert/update em `clinics` e `clinic_members`
-- **Editados:** `src/components/ClinicSwitcher.tsx`, `src/components/DashboardLayout.tsx`
+- **Migration:** adicionar colunas em `profiles`
+- **Novo:** `src/components/settings/UserDetailDialog.tsx` (modal completo + form de edição)
+- **Editado:** `src/components/settings/UsuariosPanel.tsx` (card clicável, abre o dialog, passa o usuário selecionado)
