@@ -35,7 +35,7 @@ const UsuariosPanel = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState("all");
+  const [tab, setTab] = useState("approved");
   const [addOpen, setAddOpen] = useState(false);
   const [addUserId, setAddUserId] = useState<string>("");
   const [addClinicId, setAddClinicId] = useState<string>("");
@@ -176,10 +176,8 @@ const UsuariosPanel = () => {
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="bg-muted/50">
+          <TabsTrigger value="approved">Ativos</TabsTrigger>
           <TabsTrigger value="pending">Pendentes</TabsTrigger>
-          <TabsTrigger value="approved">Aprovados</TabsTrigger>
-          <TabsTrigger value="rejected">Rejeitados</TabsTrigger>
-          <TabsTrigger value="all">Todos</TabsTrigger>
         </TabsList>
 
         <TabsContent value={tab} className="mt-4">
