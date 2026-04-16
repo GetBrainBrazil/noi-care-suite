@@ -13,8 +13,6 @@ import Agenda from "./pages/Agenda";
 import IAConfig from "./pages/IAConfig";
 import Upload from "./pages/Upload";
 import Configuracoes from "./pages/Configuracoes";
-import Cargos from "./pages/Cargos";
-import Usuarios from "./pages/Usuarios";
 import Suporte from "./pages/Suporte";
 import DashboardLayout from "./components/DashboardLayout";
 import NotFound from "./pages/NotFound";
@@ -39,8 +37,6 @@ const App = () => (
               <Route path="/ia" element={<ProtectedRoute module="ia-config"><IAConfig /></ProtectedRoute>} />
               <Route path="/upload" element={<ProtectedRoute module="upload"><Upload /></ProtectedRoute>} />
               <Route path="/configuracoes" element={<ProtectedRoute module="configuracoes"><Configuracoes /></ProtectedRoute>} />
-              <Route path="/cargos" element={<ProtectedRoute adminOnly><Cargos /></ProtectedRoute>} />
-              <Route path="/usuarios" element={<ProtectedRoute adminOnly><Usuarios /></ProtectedRoute>} />
               <Route path="/suporte" element={<ProtectedRoute module="suporte"><Suporte /></ProtectedRoute>} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -28,7 +28,7 @@ interface Role {
   role_permissions: { module: string }[];
 }
 
-const Cargos = () => {
+const CargosPanel = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -165,4 +165,4 @@ const Cargos = () => {
   );
 };
 
-export default Cargos;
+export default CargosPanel;
