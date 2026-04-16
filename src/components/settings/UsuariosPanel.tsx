@@ -35,7 +35,7 @@ const UsuariosPanel = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [memberships, setMemberships] = useState<Membership[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState("pending");
+  const [tab, setTab] = useState("all");
   const [addOpen, setAddOpen] = useState(false);
   const [addUserId, setAddUserId] = useState<string>("");
   const [addClinicId, setAddClinicId] = useState<string>("");
