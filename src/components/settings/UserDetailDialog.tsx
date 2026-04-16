@@ -72,14 +72,37 @@ const formatDateTime = (s?: string | null) => {
 };
 
 export function UserDetailDialog({ user, open, onOpenChange, canEdit, activeClinicId, onChanged }: Props) {
+  const { clinics } = useClinic();
   const [memberships, setMemberships] = useState<ClinicMembership[]>([]);
+  const [allRoles, setAllRoles] = useState<{ id: string; name: string }[]>([]);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<Partial<UserDetail>>({});
+  const [addClinicId, setAddClinicId] = useState("");
+  const [addRoleId, setAddRoleId] = useState("");
+  const [addOpen, setAddOpen] = useState(false);
+
+  const loadMemberships = async (uid: string) => {
+    const { data } = await supabase
+      .from("clinic_members")
+      .select("clinic_id, role_id, clinics(name), roles(name, role_permissions(module))")
+      .eq("user_id", uid);
+    const mapped: ClinicMembership[] = (data ?? []).map((m: any) => ({
+      clinic_id: m.clinic_id,
+      role_id: m.role_id,
+      clinic_name: m.clinics?.name ?? "—",
+      role_name: m.roles?.name ?? null,
+      modules: (m.roles?.role_permissions ?? []).map((p: any) => p.module),
+    }));
+    setMemberships(mapped);
+  };
 
   useEffect(() => {
     if (!user || !open) return;
     setEditing(false);
+    setAddOpen(false);
+    setAddClinicId("");
+    setAddRoleId("");
     setForm({
       phone: user.phone ?? "",
       birth_date: user.birth_date ?? "",
@@ -89,21 +112,49 @@ export function UserDetailDialog({ user, open, onOpenChange, canEdit, activeClin
       procedures: user.procedures ?? [],
       bio: user.bio ?? "",
     });
-
-    (async () => {
-      const { data } = await supabase
-        .from("clinic_members")
-        .select("clinic_id, clinics(name), roles(name, role_permissions(module))")
-        .eq("user_id", user.user_id);
-      const mapped: ClinicMembership[] = (data ?? []).map((m: any) => ({
-        clinic_id: m.clinic_id,
-        clinic_name: m.clinics?.name ?? "—",
-        role_name: m.roles?.name ?? null,
-        modules: (m.roles?.role_permissions ?? []).map((p: any) => p.module),
-      }));
-      setMemberships(mapped);
-    })();
+    loadMemberships(user.user_id);
+    supabase.from("roles").select("id, name").order("name").then(({ data }) => {
+      setAllRoles((data as any) ?? []);
+    });
   }, [user, open]);
+
+  const addToClinic = async () => {
+    if (!user) return;
+    if (!addClinicId || !addRoleId) {
+      return toast({ title: "Selecione clínica e cargo", variant: "destructive" });
+    }
+    const { error } = await supabase.from("clinic_members").insert({
+      user_id: user.user_id, clinic_id: addClinicId, role_id: addRoleId,
+    });
+    if (error) return toast({ title: "Erro", description: error.message, variant: "destructive" });
+    toast({ title: "Unidade vinculada" });
+    setAddClinicId(""); setAddRoleId(""); setAddOpen(false);
+    await loadMemberships(user.user_id);
+    onChanged?.();
+  };
+
+  const changeRole = async (clinicId: string, roleId: string) => {
+    if (!user) return;
+    await supabase.from("clinic_members").delete()
+      .eq("user_id", user.user_id).eq("clinic_id", clinicId);
+    const { error } = await supabase.from("clinic_members").insert({
+      user_id: user.user_id, clinic_id: clinicId, role_id: roleId,
+    });
+    if (error) return toast({ title: "Erro", description: error.message, variant: "destructive" });
+    toast({ title: "Cargo atualizado" });
+    await loadMemberships(user.user_id);
+    onChanged?.();
+  };
+
+  const removeFromClinic = async (clinicId: string) => {
+    if (!user) return;
+    const { error } = await supabase.from("clinic_members").delete()
+      .eq("user_id", user.user_id).eq("clinic_id", clinicId);
+    if (error) return toast({ title: "Erro", description: error.message, variant: "destructive" });
+    toast({ title: "Removido da unidade" });
+    await loadMemberships(user.user_id);
+    onChanged?.();
+  };
 
   if (!user) return null;
 
