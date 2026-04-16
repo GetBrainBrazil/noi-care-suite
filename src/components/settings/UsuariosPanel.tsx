@@ -2,14 +2,18 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, X, UserCog, UserPlus, Building2 } from "lucide-react";
+import { Check, X, UserCog, UserPlus, Building2, MoreHorizontal, Shield, Trash2, ShieldCheck } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useClinic } from "@/contexts/ClinicContext";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 
 interface Profile {
   id: string;
@@ -30,7 +34,7 @@ const statusBadge: Record<string, string> = {
 const statusLabel: Record<string, string> = { pending: "Pendente", approved: "Aprovado", rejected: "Rejeitado" };
 
 const UsuariosPanel = () => {
-  const { activeClinic, activeClinicId, clinics } = useClinic();
+  const { activeClinic, activeClinicId, clinics, isClinicAdmin } = useClinic();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [memberships, setMemberships] = useState<Membership[]>([]);
@@ -193,62 +197,102 @@ const UsuariosPanel = () => {
               ) : filtered.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-8 text-center">Nenhum usuário nesta categoria.</p>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filtered.map((u) => {
                     const memHere = membershipFor(u.user_id, activeClinicId);
                     const otherClinics = memberships.filter(
                       (m) => m.user_id === u.user_id && m.clinic_id !== activeClinicId
                     );
+                    const roleName = roles.find((r) => r.id === memHere?.role_id)?.name;
+                    const initials = (u.full_name || u.email).slice(0, 2).toUpperCase();
                     return (
-                      <div key={u.id} className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg border border-border/40 hover:bg-muted/20 transition-colors">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium text-primary shrink-0">
-                            {(u.full_name || u.email).slice(0, 2).toUpperCase()}
-                          </div>
-                          <div className="min-w-0">
+                      <div
+                        key={u.id}
+                        className="group relative flex items-center gap-3 p-4 rounded-xl border border-border/50 bg-card hover:border-border hover:shadow-sm transition-all"
+                      >
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-sm font-semibold text-primary shrink-0 ring-1 ring-primary/10">
+                          {initials}
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
                             <p className="text-sm font-medium truncate">{u.full_name || "Sem nome"}</p>
-                            <p className="text-xs text-muted-foreground truncate">{u.email}</p>
+                            {u.status === "pending" && (
+                              <Badge variant="outline" className="h-5 px-1.5 text-[10px] border-warning/40 text-warning">
+                                Pendente
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">{u.email}</p>
+                          <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                            {roleName ? (
+                              <Badge variant="secondary" className="h-5 px-1.5 text-[10px] gap-1 font-normal">
+                                <ShieldCheck className="h-3 w-3" />
+                                {roleName}
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="h-5 px-1.5 text-[10px] text-muted-foreground font-normal">
+                                Sem cargo
+                              </Badge>
+                            )}
                             {otherClinics.length > 0 && (
-                              <p className="text-[10px] text-muted-foreground mt-0.5">
-                                Também em: {otherClinics.map((m) => m.clinics?.name).filter(Boolean).join(", ")}
-                              </p>
+                              <span className="text-[10px] text-muted-foreground">
+                                +{otherClinics.length} {otherClinics.length === 1 ? "unidade" : "unidades"}
+                              </span>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusBadge[u.status]}`}>
-                            {statusLabel[u.status]}
-                          </span>
-                          <Select
-                            value={memHere?.role_id ?? ""}
-                            onValueChange={(v) => assignRoleInActiveClinic(u.user_id, v)}
-                          >
-                            <SelectTrigger className="h-8 w-[160px] text-xs">
-                              <SelectValue placeholder="Atribuir cargo" />
-                            </SelectTrigger>
-                            <SelectContent>
+
+                        {isClinicAdmin && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 shrink-0 opacity-0 group-hover:opacity-100 focus:opacity-100 data-[state=open]:opacity-100 transition-opacity"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                              <DropdownMenuLabel className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                <Shield className="h-3 w-3" /> Cargo em {activeClinic?.name}
+                              </DropdownMenuLabel>
                               {roles.map((r) => (
-                                <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                                <DropdownMenuItem
+                                  key={r.id}
+                                  onClick={() => assignRoleInActiveClinic(u.user_id, r.id)}
+                                  className="cursor-pointer text-sm"
+                                >
+                                  {r.name}
+                                  {memHere?.role_id === r.id && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+                                </DropdownMenuItem>
                               ))}
-                            </SelectContent>
-                          </Select>
-                          {memHere && (
-                            <Button size="sm" variant="ghost" className="h-8 gap-1 text-xs text-muted-foreground"
-                              onClick={() => removeFromClinic(u.user_id, activeClinicId!)}>
-                              <X className="h-3.5 w-3.5" /> Remover daqui
-                            </Button>
-                          )}
-                          {u.status !== "approved" && (
-                            <Button size="sm" variant="outline" className="h-8 gap-1 text-xs" onClick={() => updateStatus(u.user_id, "approved")}>
-                              <Check className="h-3.5 w-3.5" /> Aprovar
-                            </Button>
-                          )}
-                          {u.status !== "rejected" && (
-                            <Button size="sm" variant="outline" className="h-8 gap-1 text-xs text-destructive hover:text-destructive" onClick={() => updateStatus(u.user_id, "rejected")}>
-                              <X className="h-3.5 w-3.5" /> Rejeitar
-                            </Button>
-                          )}
-                        </div>
+                              <DropdownMenuSeparator />
+                              {u.status !== "approved" && (
+                                <DropdownMenuItem onClick={() => updateStatus(u.user_id, "approved")} className="cursor-pointer text-sm">
+                                  <Check className="h-3.5 w-3.5 mr-2" /> Aprovar usuário
+                                </DropdownMenuItem>
+                              )}
+                              {memHere && (
+                                <DropdownMenuItem
+                                  onClick={() => removeFromClinic(u.user_id, activeClinicId!)}
+                                  className="cursor-pointer text-sm text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5 mr-2" /> Remover desta unidade
+                                </DropdownMenuItem>
+                              )}
+                              {u.status !== "rejected" && (
+                                <DropdownMenuItem
+                                  onClick={() => updateStatus(u.user_id, "rejected")}
+                                  className="cursor-pointer text-sm text-destructive focus:text-destructive"
+                                >
+                                  <X className="h-3.5 w-3.5 mr-2" /> Rejeitar usuário
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
                       </div>
                     );
                   })}
