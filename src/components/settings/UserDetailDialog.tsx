@@ -237,28 +237,94 @@ export function UserDetailDialog({ user, open, onOpenChange, canEdit, activeClin
 
         {/* Acesso & Permissões */}
         <section className="space-y-3">
-          <h3 className="text-sm font-semibold flex items-center gap-1.5 text-muted-foreground uppercase tracking-wide">
-            <ShieldCheck className="h-3.5 w-3.5" /> Acesso & Permissões
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold flex items-center gap-1.5 text-muted-foreground uppercase tracking-wide">
+              <ShieldCheck className="h-3.5 w-3.5" /> Unidades & Cargos
+            </h3>
+            {canEdit && (
+              <Popover open={addOpen} onOpenChange={setAddOpen}>
+                <PopoverTrigger asChild>
+                  <Button size="sm" variant="ghost" className="h-7 gap-1.5">
+                    <Plus className="h-3.5 w-3.5" /> Vincular unidade
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 space-y-3" align="end">
+                  <p className="text-xs font-medium text-muted-foreground">Adicionar a outra unidade</p>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Unidade</Label>
+                    <Select value={addClinicId} onValueChange={setAddClinicId}>
+                      <SelectTrigger><SelectValue placeholder="Escolha a unidade" /></SelectTrigger>
+                      <SelectContent>
+                        {clinics
+                          .filter((c) => !memberships.some((m) => m.clinic_id === c.id))
+                          .map((c) => (
+                            <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Cargo</Label>
+                    <Select value={addRoleId} onValueChange={setAddRoleId}>
+                      <SelectTrigger><SelectValue placeholder="Escolha o cargo" /></SelectTrigger>
+                      <SelectContent>
+                        {allRoles.map((r) => (
+                          <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button size="sm" className="w-full" onClick={addToClinic}>Vincular</Button>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
           <div className="space-y-2">
             {memberships.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Não vinculado a nenhuma unidade.</p>
+              <p className="text-sm text-muted-foreground py-3 text-center border border-dashed rounded-lg">
+                Não vinculado a nenhuma unidade.
+              </p>
             ) : (
               memberships.map((m) => (
                 <div
                   key={m.clinic_id}
-                  className={`flex items-center justify-between p-3 rounded-lg border ${
+                  className={`flex items-center justify-between gap-2 p-3 rounded-lg border ${
                     m.clinic_id === activeClinicId ? "border-primary/30 bg-primary/5" : "border-border/50 bg-muted/20"
                   }`}
                 >
-                  <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <Building2 className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span className="text-sm font-medium truncate">{m.clinic_name}</span>
                     {m.clinic_id === activeClinicId && (
-                      <Badge variant="outline" className="h-5 text-[10px] border-primary/40 text-primary">Atual</Badge>
+                      <Badge variant="outline" className="h-5 text-[10px] border-primary/40 text-primary shrink-0">Atual</Badge>
                     )}
                   </div>
-                  <Badge variant="secondary" className="font-normal">{m.role_name ?? "Sem cargo"}</Badge>
+                  {canEdit ? (
+                    <div className="flex items-center gap-1 shrink-0">
+                      <Select
+                        value={m.role_id ?? ""}
+                        onValueChange={(v) => changeRole(m.clinic_id, v)}
+                      >
+                        <SelectTrigger className="h-8 w-36 text-xs">
+                          <SelectValue placeholder="Cargo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {allRoles.map((r) => (
+                            <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        size="icon" variant="ghost"
+                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={() => removeFromClinic(m.clinic_id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <Badge variant="secondary" className="font-normal">{m.role_name ?? "Sem cargo"}</Badge>
+                  )}
                 </div>
               ))
             )}
