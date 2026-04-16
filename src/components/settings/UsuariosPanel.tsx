@@ -14,6 +14,7 @@ import {
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
+import { UserDetailDialog, type UserDetail } from "./UserDetailDialog";
 
 interface Profile {
   id: string;
@@ -22,6 +23,14 @@ interface Profile {
   email: string;
   status: "pending" | "approved" | "rejected";
   created_at: string;
+  phone?: string | null;
+  birth_date?: string | null;
+  address?: string | null;
+  cro?: string | null;
+  specializations?: string[] | null;
+  procedures?: string[] | null;
+  bio?: string | null;
+  last_sign_in_at?: string | null;
 }
 interface Role { id: string; name: string }
 interface Membership { user_id: string; clinic_id: string; role_id: string; clinics: { name: string } | null; }
@@ -44,6 +53,8 @@ const UsuariosPanel = () => {
   const [addUserId, setAddUserId] = useState<string>("");
   const [addClinicId, setAddClinicId] = useState<string>("");
   const [addRoleId, setAddRoleId] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<UserDetail | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -208,7 +219,8 @@ const UsuariosPanel = () => {
                     return (
                       <div
                         key={u.id}
-                        className="group relative flex items-center gap-3 p-4 rounded-xl border border-border/50 bg-card hover:border-border hover:shadow-sm transition-all"
+                        onClick={() => { setSelectedUser(u as UserDetail); setDetailOpen(true); }}
+                        className="group relative flex items-center gap-3 p-4 rounded-xl border border-border/50 bg-card hover:border-primary/30 hover:shadow-md cursor-pointer transition-all"
                       >
                         <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-sm font-semibold text-primary shrink-0 ring-1 ring-primary/10">
                           {initials}
@@ -245,7 +257,7 @@ const UsuariosPanel = () => {
 
                         {isClinicAdmin && (
                           <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                               <Button
                                 size="icon"
                                 variant="ghost"
@@ -254,7 +266,7 @@ const UsuariosPanel = () => {
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56">
+                            <DropdownMenuContent align="end" className="w-56" onClick={(e) => e.stopPropagation()}>
                               <DropdownMenuLabel className="text-xs text-muted-foreground flex items-center gap-1.5">
                                 <Shield className="h-3 w-3" /> Cargo em {activeClinic?.name}
                               </DropdownMenuLabel>
@@ -302,6 +314,15 @@ const UsuariosPanel = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <UserDetailDialog
+        user={selectedUser}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        canEdit={isClinicAdmin}
+        activeClinicId={activeClinicId}
+        onChanged={load}
+      />
     </div>
   );
 };
