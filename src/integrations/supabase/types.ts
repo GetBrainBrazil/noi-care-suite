@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments_cache: {
+        Row: {
+          clinic_id: string
+          doctor_external_id: string | null
+          doctor_name: string | null
+          duration_minutes: number | null
+          external_appointment_id: string
+          id: string
+          lead_id: string | null
+          patient_external_id: string
+          patient_name: string
+          procedure: string | null
+          raw_payload: Json | null
+          scheduled_at: string
+          status: string | null
+          synced_at: string
+        }
+        Insert: {
+          clinic_id: string
+          doctor_external_id?: string | null
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          external_appointment_id: string
+          id?: string
+          lead_id?: string | null
+          patient_external_id: string
+          patient_name: string
+          procedure?: string | null
+          raw_payload?: Json | null
+          scheduled_at: string
+          status?: string | null
+          synced_at?: string
+        }
+        Update: {
+          clinic_id?: string
+          doctor_external_id?: string | null
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          external_appointment_id?: string
+          id?: string
+          lead_id?: string | null
+          patient_external_id?: string
+          patient_name?: string
+          procedure?: string | null
+          raw_payload?: Json | null
+          scheduled_at?: string
+          status?: string | null
+          synced_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_cache_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_cache_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clinic_members: {
         Row: {
           clinic_id: string
@@ -91,6 +157,456 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      conversations: {
+        Row: {
+          ai_paused: boolean
+          assigned_to: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          created_at: string
+          handoff_at: string | null
+          handoff_by: string | null
+          handoff_reason: string | null
+          id: string
+          last_message_at: string | null
+          lead_id: string
+          status: Database["public"]["Enums"]["conversation_status"]
+          unread_count: number
+          updated_at: string
+        }
+        Insert: {
+          ai_paused?: boolean
+          assigned_to?: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          created_at?: string
+          handoff_at?: string | null
+          handoff_by?: string | null
+          handoff_reason?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id: string
+          status?: Database["public"]["Enums"]["conversation_status"]
+          unread_count?: number
+          updated_at?: string
+        }
+        Update: {
+          ai_paused?: boolean
+          assigned_to?: string | null
+          channel?: Database["public"]["Enums"]["lead_channel"]
+          clinic_id?: string
+          created_at?: string
+          handoff_at?: string | null
+          handoff_by?: string | null
+          handoff_reason?: string | null
+          id?: string
+          last_message_at?: string | null
+          lead_id?: string
+          status?: Database["public"]["Enums"]["conversation_status"]
+          unread_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follow_up_templates: {
+        Row: {
+          clinic_id: string
+          created_at: string
+          days_offset: number | null
+          id: string
+          is_active: boolean
+          message_template: string
+          name: string
+          requires_approval: boolean
+          type: Database["public"]["Enums"]["follow_up_type"]
+          updated_at: string
+        }
+        Insert: {
+          clinic_id: string
+          created_at?: string
+          days_offset?: number | null
+          id?: string
+          is_active?: boolean
+          message_template: string
+          name: string
+          requires_approval?: boolean
+          type: Database["public"]["Enums"]["follow_up_type"]
+          updated_at?: string
+        }
+        Update: {
+          clinic_id?: string
+          created_at?: string
+          days_offset?: number | null
+          id?: string
+          is_active?: boolean
+          message_template?: string
+          name?: string
+          requires_approval?: boolean
+          type?: Database["public"]["Enums"]["follow_up_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_up_templates_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follow_ups: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          created_at: string
+          created_by: string
+          error_message: string | null
+          id: string
+          lead_id: string
+          message_preview: string
+          scheduled_for: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["follow_up_status"]
+          template_id: string | null
+          type: Database["public"]["Enums"]["follow_up_type"]
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          created_at?: string
+          created_by?: string
+          error_message?: string | null
+          id?: string
+          lead_id: string
+          message_preview: string
+          scheduled_for: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["follow_up_status"]
+          template_id?: string | null
+          type: Database["public"]["Enums"]["follow_up_type"]
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          channel?: Database["public"]["Enums"]["lead_channel"]
+          clinic_id?: string
+          created_at?: string
+          created_by?: string
+          error_message?: string | null
+          id?: string
+          lead_id?: string
+          message_preview?: string
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["follow_up_status"]
+          template_id?: string | null
+          type?: Database["public"]["Enums"]["follow_up_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_ups_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_ups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_ups_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "follow_up_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_consents: {
+        Row: {
+          consent_source: string | null
+          consented_at: string | null
+          data_sharing_opt_in: boolean
+          id: string
+          lead_id: string
+          marketing_opt_in: boolean
+          reminders_opt_in: boolean
+          revoked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          consent_source?: string | null
+          consented_at?: string | null
+          data_sharing_opt_in?: boolean
+          id?: string
+          lead_id: string
+          marketing_opt_in?: boolean
+          reminders_opt_in?: boolean
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          consent_source?: string | null
+          consented_at?: string | null
+          data_sharing_opt_in?: boolean
+          id?: string
+          lead_id?: string
+          marketing_opt_in?: boolean
+          reminders_opt_in?: boolean
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_consents_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: true
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_tag_assignments: {
+        Row: {
+          assigned_at: string
+          lead_id: string
+          tag_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          lead_id: string
+          tag_id: string
+        }
+        Update: {
+          assigned_at?: string
+          lead_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_tag_assignments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lead_tag_assignments_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "lead_tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_tags: {
+        Row: {
+          clinic_id: string
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          clinic_id: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          clinic_id?: string
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_tags_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          cpf: string | null
+          created_at: string
+          email: string | null
+          estimated_value_brl: number | null
+          external_contact_id: string | null
+          id: string
+          last_interaction_at: string | null
+          lost_notes: string | null
+          lost_reason: Database["public"]["Enums"]["lost_reason"] | null
+          name: string
+          notes: string | null
+          patient_external_id: string | null
+          phone: string | null
+          procedure_interest: string | null
+          referral_source: string | null
+          score: number | null
+          source_campaign: string | null
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          channel: Database["public"]["Enums"]["lead_channel"]
+          clinic_id: string
+          cpf?: string | null
+          created_at?: string
+          email?: string | null
+          estimated_value_brl?: number | null
+          external_contact_id?: string | null
+          id?: string
+          last_interaction_at?: string | null
+          lost_notes?: string | null
+          lost_reason?: Database["public"]["Enums"]["lost_reason"] | null
+          name: string
+          notes?: string | null
+          patient_external_id?: string | null
+          phone?: string | null
+          procedure_interest?: string | null
+          referral_source?: string | null
+          score?: number | null
+          source_campaign?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          channel?: Database["public"]["Enums"]["lead_channel"]
+          clinic_id?: string
+          cpf?: string | null
+          created_at?: string
+          email?: string | null
+          estimated_value_brl?: number | null
+          external_contact_id?: string | null
+          id?: string
+          last_interaction_at?: string | null
+          lost_notes?: string | null
+          lost_reason?: Database["public"]["Enums"]["lost_reason"] | null
+          name?: string
+          notes?: string | null
+          patient_external_id?: string | null
+          phone?: string | null
+          procedure_interest?: string | null
+          referral_source?: string | null
+          score?: number | null
+          source_campaign?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          ai_confidence: number | null
+          clinic_id: string
+          content: string
+          conversation_id: string
+          created_at: string
+          delivery_status: string | null
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_message: string | null
+          external_message_id: string | null
+          id: string
+          media_type: string | null
+          media_url: string | null
+          sender: Database["public"]["Enums"]["message_sender"]
+          sent_by: string | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          clinic_id: string
+          content: string
+          conversation_id: string
+          created_at?: string
+          delivery_status?: string | null
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_message?: string | null
+          external_message_id?: string | null
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          sender: Database["public"]["Enums"]["message_sender"]
+          sent_by?: string | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          clinic_id?: string
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          delivery_status?: string | null
+          direction?: Database["public"]["Enums"]["message_direction"]
+          error_message?: string | null
+          external_message_id?: string | null
+          id?: string
+          media_type?: string | null
+          media_url?: string | null
+          sender?: Database["public"]["Enums"]["message_sender"]
+          sent_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -205,6 +721,79 @@ export type Database = {
         }
         Relationships: []
       }
+      tasks: {
+        Row: {
+          assigned_to: string | null
+          clinic_id: string
+          completed_at: string | null
+          conversation_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_at: string | null
+          id: string
+          lead_id: string | null
+          priority: Database["public"]["Enums"]["task_priority"]
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          clinic_id: string
+          completed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          clinic_id?: string
+          completed_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          lead_id?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_clinic_id_fkey"
+            columns: ["clinic_id"]
+            isOneToOne: false
+            referencedRelation: "clinics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -277,6 +866,42 @@ export type Database = {
         | "suporte"
         | "configuracoes"
       approval_status: "pending" | "approved" | "rejected"
+      conversation_status: "ativa" | "aguardando" | "encerrada"
+      follow_up_status:
+        | "pendente"
+        | "aprovado"
+        | "enviado"
+        | "cancelado"
+        | "falhou"
+      follow_up_type:
+        | "pos_consulta"
+        | "tratamento_nao_concluido"
+        | "rechamada_longa"
+        | "paciente_sumiu"
+        | "confirmacao_orcamento"
+        | "aniversario"
+        | "retorno_recorrente"
+        | "custom"
+      lead_channel: "whatsapp" | "instagram" | "indicacao" | "manual" | "outro"
+      lead_status:
+        | "novo"
+        | "qualificado"
+        | "em_atendimento"
+        | "agendado"
+        | "compareceu"
+        | "convertido"
+        | "perdido"
+      lost_reason:
+        | "preco"
+        | "distancia"
+        | "tempo_espera"
+        | "concorrente"
+        | "sem_resposta"
+        | "outro"
+      message_direction: "inbound" | "outbound"
+      message_sender: "ai" | "lead" | "human"
+      task_priority: "baixa" | "media" | "alta" | "urgente"
+      task_status: "aberta" | "em_andamento" | "concluida" | "cancelada"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -415,6 +1040,46 @@ export const Constants = {
         "configuracoes",
       ],
       approval_status: ["pending", "approved", "rejected"],
+      conversation_status: ["ativa", "aguardando", "encerrada"],
+      follow_up_status: [
+        "pendente",
+        "aprovado",
+        "enviado",
+        "cancelado",
+        "falhou",
+      ],
+      follow_up_type: [
+        "pos_consulta",
+        "tratamento_nao_concluido",
+        "rechamada_longa",
+        "paciente_sumiu",
+        "confirmacao_orcamento",
+        "aniversario",
+        "retorno_recorrente",
+        "custom",
+      ],
+      lead_channel: ["whatsapp", "instagram", "indicacao", "manual", "outro"],
+      lead_status: [
+        "novo",
+        "qualificado",
+        "em_atendimento",
+        "agendado",
+        "compareceu",
+        "convertido",
+        "perdido",
+      ],
+      lost_reason: [
+        "preco",
+        "distancia",
+        "tempo_espera",
+        "concorrente",
+        "sem_resposta",
+        "outro",
+      ],
+      message_direction: ["inbound", "outbound"],
+      message_sender: ["ai", "lead", "human"],
+      task_priority: ["baixa", "media", "alta", "urgente"],
+      task_status: ["aberta", "em_andamento", "concluida", "cancelada"],
     },
   },
 } as const
