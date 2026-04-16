@@ -94,31 +94,55 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           avatar_url: string | null
+          bio: string | null
+          birth_date: string | null
           created_at: string
+          cro: string | null
           email: string
           full_name: string | null
           id: string
+          last_sign_in_at: string | null
+          phone: string | null
+          procedures: string[] | null
+          specializations: string[] | null
           status: Database["public"]["Enums"]["approval_status"]
           updated_at: string
           user_id: string
         }
         Insert: {
+          address?: string | null
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           created_at?: string
+          cro?: string | null
           email: string
           full_name?: string | null
           id?: string
+          last_sign_in_at?: string | null
+          phone?: string | null
+          procedures?: string[] | null
+          specializations?: string[] | null
           status?: Database["public"]["Enums"]["approval_status"]
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string | null
           avatar_url?: string | null
+          bio?: string | null
+          birth_date?: string | null
           created_at?: string
+          cro?: string | null
           email?: string
           full_name?: string | null
           id?: string
+          last_sign_in_at?: string | null
+          phone?: string | null
+          procedures?: string[] | null
+          specializations?: string[] | null
           status?: Database["public"]["Enums"]["approval_status"]
           updated_at?: string
           user_id?: string
