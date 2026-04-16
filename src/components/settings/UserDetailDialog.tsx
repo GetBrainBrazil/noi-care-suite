@@ -37,6 +37,7 @@ export interface UserDetail {
 
 interface ClinicMembership {
   clinic_id: string;
+  role_id?: string;
   clinic_name: string;
   role_name: string | null;
   modules: string[];
