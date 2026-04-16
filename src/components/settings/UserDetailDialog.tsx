@@ -9,11 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   ShieldCheck, Building2, Mail, Phone, Calendar, MapPin, Stethoscope,
-  IdCard, Pencil, Save, X, Sparkles, Clock, Hash,
+  IdCard, Pencil, Save, X, Sparkles, Clock, Hash, Plus, Trash2,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useClinic } from "@/contexts/ClinicContext";
 
 export interface UserDetail {
   id: string;
