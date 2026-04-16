@@ -1,4 +1,4 @@
-import { LayoutDashboard, MessageSquare, Upload, Settings, LifeBuoy, LogOut, Users, CalendarDays, Bot, Shield, UserCog } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Upload, Settings, LifeBuoy, LogOut, Users, CalendarDays, Bot } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -30,10 +30,6 @@ const menuItems: { title: string; url: string; icon: any; module: ModuleKey }[] 
   { title: "Suporte", url: "/suporte", icon: LifeBuoy, module: "suporte" },
 ];
 
-const adminItems = [
-  { title: "Usuários", url: "/usuarios", icon: UserCog },
-  { title: "Cargos", url: "/cargos", icon: Shield },
-];
 
 export function AppSidebar() {
   const { state } = useSidebar();
@@ -83,32 +79,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {isAdmin && (
-          <SidebarGroup>
-            <SidebarGroupContent>
-              {!collapsed && (
-                <p className="px-5 pt-2 pb-1 text-[10px] uppercase tracking-widest text-muted-foreground">Administração</p>
-              )}
-              <SidebarMenu>
-                {adminItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink
-                        to={item.url}
-                        end
-                        className="hover:bg-sidebar-accent/60 transition-colors rounded-lg px-3 py-2"
-                        activeClassName="bg-sidebar-accent text-sidebar-primary font-medium"
-                      >
-                        <item.icon className="h-4 w-4 mr-3 shrink-0" />
-                        {!collapsed && <span className="text-sm">{item.title}</span>}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
