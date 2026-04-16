@@ -2,7 +2,9 @@ import { LayoutDashboard, MessageSquare, Upload, Settings, LifeBuoy, LogOut, Use
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useClinic } from "@/contexts/ClinicContext";
 import noiLogo from "@/assets/noi-logo.png";
+import { ClinicSwitcher } from "@/components/ClinicSwitcher";
 import {
   Sidebar,
   SidebarContent,
@@ -35,9 +37,10 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
-  const { isAdmin, modules, signOut, profile } = useAuth();
+  const { isAdmin, signOut, profile } = useAuth();
+  const { clinicModules } = useClinic();
 
-  const visibleItems = menuItems.filter((i) => isAdmin || modules.includes(i.module));
+  const visibleItems = menuItems.filter((i) => isAdmin || clinicModules.includes(i.module));
 
   const handleLogout = async () => {
     await signOut();
@@ -56,6 +59,8 @@ export function AppSidebar() {
             </div>
           )}
         </div>
+
+        <ClinicSwitcher />
 
         <SidebarGroup>
           <SidebarGroupContent>
