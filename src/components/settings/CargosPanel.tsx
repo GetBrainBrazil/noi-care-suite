@@ -165,4 +165,4 @@ const CargosPanel = () => {
   );
 };
 
-export default Cargos;
+export default CargosPanel;

@@ -139,4 +139,4 @@ const UsuariosPanel = () => {
   );
 };
 
-export default Usuarios;
+export default UsuariosPanel;
