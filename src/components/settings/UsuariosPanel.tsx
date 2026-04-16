@@ -25,7 +25,7 @@ const statusBadge: Record<string, string> = {
 };
 const statusLabel: Record<string, string> = { pending: "Pendente", approved: "Aprovado", rejected: "Rejeitado" };
 
-const Usuarios = () => {
+const UsuariosPanel = () => {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
